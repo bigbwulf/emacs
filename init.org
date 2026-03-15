@@ -401,7 +401,7 @@ Completion popups for mb
 
 
   ;; ;;
-  (setq org-refile-targets
+;;  (setq org-refile-targets
         ;; '(("~/org/projects.org" :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
         ;; ("~/org/someday.org" :level . 1)))
 
