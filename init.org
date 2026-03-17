@@ -310,10 +310,19 @@ Completion popups for mb
 
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((lisp . t)))
+   '((lisp . t) (plantuml .t)))
 
   (setq org-babel-lisp-eval-fn #'slime-eval)
+
+  (add-hook 'org-babel-after-execute-hook
+          (lambda ()
+            (when org-inline-image-overlays
+              (org-redisplay-inline-images))))
+
 #+end_src
+
+
+
 
 ** Helm-bibtex
 #+begin_src emacs-lisp
@@ -487,7 +496,25 @@ Completion popups for mb
     :config
     (when (locate-library "denote")
       (consult-notes-denote-mode)))
-#+end_src
+
+(use-package denote-journal
+  :ensure t
+  ;; Bind those to some key for your convenience.
+  :commands ( denote-journal-new-entry
+              denote-journal-new-or-existing-entry
+              denote-journal-link-or-create-entry )
+  :hook (calendar-mode . denote-journal-calendar-mode)
+  :config
+  ;; Use the "journal" subdirectory of the `denote-directory'.  Set this
+  ;; to nil to use the `denote-directory' instead.
+  (setq denote-journal-directory
+        (expand-file-name "journal" denote-directory))
+  ;; Default keyword for new journal entries. It can also be a list of
+  ;; strings.
+  (setq denote-journal-keyword "journal")
+  ;; Read the doc string of `denote-journal-title-format'.
+  (setq denote-journal-title-format 'day-date-month-year))
+      #+end_src
 
 ** Citar
 #+begin_src emacs-lisp
@@ -498,10 +525,14 @@ Completion popups for mb
     :custom
     (citar-bibliography '("~/org/denote/references.bib"))
     (citar-open-always-create-notes nil)
+    (citar-library-paths '("~/org/denote/"))
     :init
     (fido-vertical-mode 1)
     :bind ("C-c w c" . citar-create-note))
 #+end_src
+
+#+RESULTS:
+: citar-create-note
 
 ** Citar-Denote
 #+begin_src emacs-lisp

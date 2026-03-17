@@ -254,9 +254,14 @@
 
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((lisp . t)))
+ '((lisp . t) (plantuml .t)))
 
 (setq org-babel-lisp-eval-fn #'slime-eval)
+
+(add-hook 'org-babel-after-execute-hook
+        (lambda ()
+          (when org-inline-image-overlays
+            (org-redisplay-inline-images))))
 ;; Org Babel config:1 ends here
 
 ;; [[file:init.org::*Helm-bibtex][Helm-bibtex:1]]
@@ -408,26 +413,44 @@
 
 ;; [[file:init.org::*Denote][Denote:1]]
 (defvar ajb/denote-dir "~/org/denote")
-(use-package denote
-  :init
-  (require 'denote-org)
-  (denote-rename-buffer-mode 1)
-  :custom
-  (denote-directory ajb/denote-dir)
-  :hook
-  (dired-mode . denote-dired-mode)
-  :custom-face
-  (denote-faces-link ((t (:slant italic)))))
+  (use-package denote
+    :init
+    (require 'denote-org)
+    (denote-rename-buffer-mode 1)
+    :custom
+    (denote-directory ajb/denote-dir)
+    :hook
+    (dired-mode . denote-dired-mode)
+    :custom-face
+    (denote-faces-link ((t (:slant italic)))))
 
-(use-package consult-notes
-  :commands (consult-notes
-             consult-notes-search-in-all-notes)
-  :custom
-  (consult-notes-file-dir-sources
-   `(("Denote" ?d ,ajb/denote-dir)))
+  (use-package consult-notes
+    :commands (consult-notes
+               consult-notes-search-in-all-notes)
+    :custom
+    (consult-notes-file-dir-sources
+     `(("Denote" ?d ,ajb/denote-dir)))
+    :config
+    (when (locate-library "denote")
+      (consult-notes-denote-mode)))
+
+(use-package denote-journal
+  :ensure t
+  ;; Bind those to some key for your convenience.
+  :commands ( denote-journal-new-entry
+              denote-journal-new-or-existing-entry
+              denote-journal-link-or-create-entry )
+  :hook (calendar-mode . denote-journal-calendar-mode)
   :config
-  (when (locate-library "denote")
-    (consult-notes-denote-mode)))
+  ;; Use the "journal" subdirectory of the `denote-directory'.  Set this
+  ;; to nil to use the `denote-directory' instead.
+  (setq denote-journal-directory
+        (expand-file-name "journal" denote-directory))
+  ;; Default keyword for new journal entries. It can also be a list of
+  ;; strings.
+  (setq denote-journal-keyword "journal")
+  ;; Read the doc string of `denote-journal-title-format'.
+  (setq denote-journal-title-format 'day-date-month-year))
 ;; Denote:1 ends here
 
 ;; [[file:init.org::*Citar][Citar:1]]
@@ -437,6 +460,7 @@
   :custom
   (citar-bibliography '("~/org/denote/references.bib"))
   (citar-open-always-create-notes nil)
+  (citar-library-paths '("~/org/denote/"))
   :init
   (fido-vertical-mode 1)
   :bind ("C-c w c" . citar-create-note))
