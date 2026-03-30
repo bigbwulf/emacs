@@ -1,0 +1,14 @@
+#+name: emacs-lisp-hello-world
+#+begin_src elisp :exports both
+(princ "Hello world!")
+#+end_src
+
+#+RESULTS: emacs-lisp-hello-world
+: Hello world!
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (message "I am tangled")
+#+END_SRC
+
+#+RESULTS:
+: I am tangled

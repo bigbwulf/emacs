@@ -1,0 +1,13 @@
+\#*\#
+auto-save-list/*
+bookmarks*
+eln-cache/*
+elpa/*
+ehsell*
+history
+ielm-history.eld
+*bk*
+*~
+url/*
+session.*
+custom.el
