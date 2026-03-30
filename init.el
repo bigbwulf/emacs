@@ -175,6 +175,10 @@
 ;; Trashed:1 ends here
 
 ;; [[file:init.org::*Undocumented][Undocumented:1]]
+<<<<<<< HEAD
+=======
+(require 'org-protocol)
+>>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -242,18 +246,27 @@
 (defalias 'emc 'find-file)
 ;; Aliases:1 ends here
 
+<<<<<<< HEAD
 ;; [[file:init.org::*Eshell][Eshell:1]]
+=======
+;; [[file:init.org::*Aliases][Aliases:2]]
+>>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
 (use-package eshell-info-banner
   :ensure t
   :defer t
   :hook (eshell-banner-load . eshell-info-banner-update-banner))
+<<<<<<< HEAD
 ;; Eshell:1 ends here
 
 ;; [[file:init.org::*Org Babel config][Org Babel config:1]]
+=======
+
+>>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
 (setq inferior-lisp-program "sbcl")
 
 (org-babel-do-load-languages
  'org-babel-load-languages
+<<<<<<< HEAD
 <<<<<<< HEAD
  '((lisp . t)))
 
@@ -271,6 +284,31 @@
 ;; Org Babel config:1 ends here
 
 ;; [[file:init.org::*Helm-bibtex][Helm-bibtex:1]]
+=======
+ '((lisp . t)))
+
+(setq org-babel-lisp-eval-fn #'slime-eval)
+
+(require 'org-tempo)
+
+
+;; tags for code navigation
+(use-package ggtags
+  :ensure t
+  :config
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (derived-mode-p 'c-mode 'c++-mode)
+                (ggtags-mode 1)))))
+
+
+(use-package yasnippet
+  :ensure t
+  :init
+  (yas-global-mode 1))
+
+
+>>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
 (use-package helm-bibtex
   :config
   (setq bibtex-completion-pdf-field "File"
@@ -278,6 +316,7 @@
         bibtex-completion-additional-search-fields '(keywords))
   :bind
   (("C-c n B" . helm-bibtex)))
+<<<<<<< HEAD
 ;; Helm-bibtex:1 ends here
 
 ;; [[file:init.org::*Org][Org:1]]
@@ -387,6 +426,8 @@
 (define-key global-map (kbd "C-c a") 'org-agenda)
 
 (setq org-log-done 'time)
+=======
+>>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
 
 
 (defvar ajb/inbox-file "~/org/inbox.org" "The location of my inbox file.")
@@ -400,9 +441,15 @@
   (("C-c c" . org-capture)
    ("C-c l" . org-store-link))
   :custom
+<<<<<<< HEAD
   (org-default-notes-file "~/org/inbox.org")
   (org-capture-bookmark nil)
   ;; Capture templates
+=======
+  (org-default-notes-file ajb/inbox-file)
+  (org-capture-bookmark nil)
+  ;;capture templates
+>>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
   (org-capture-templates
    '(("f" "Fleeting note" item
       (file+headline org-default-notes-file "Notes")
@@ -411,6 +458,7 @@
       (file denote-last-path)
       #'denote-org-capture
       :no-save t
+<<<<<<< HEAD
       :immediate-finish nil
       :kill-buffer t
       :jump-to-captured t)
@@ -446,6 +494,16 @@
 ;; Org helper functions:1 ends here
 
 ;; [[file:init.org::*Denote][Denote:1]]
+=======
+      :immediate finish nil
+      :kill-buffer
+      :jump-to-captured t)
+     ("t" "New task" entry
+      (file+headline org-default-notes-file "Tasks")
+      "* TODO %i%?"))))
+
+
+>>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
 (defvar ajb/denote-dir "~/org/denote")
 (use-package denote
   :init
@@ -467,6 +525,7 @@
   :config
   (when (locate-library "denote")
     (consult-notes-denote-mode)))
+<<<<<<< HEAD
 =======
   (setq org-todo-keywords
         (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
@@ -641,10 +700,14 @@
 ;; Denote:1 ends here
 
 ;; [[file:init.org::*Citar][Citar:1]]
+=======
+
+>>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
 (use-package citar
   :ensure t
   :defer t
   :custom
+<<<<<<< HEAD
   (citar-bibliography '("~/org/denote/references.bib"))
   (citar-open-always-create-notes nil)
 <<<<<<< HEAD
@@ -730,3 +793,20 @@ Version: 2025-10-16"
     (setcar xresult (aref xletters (random (length xletters))))
     (concat xresult)))
 ;; Random string:1 ends here
+=======
+  (citar-bibliography '("~/org/references.bib"))
+  (citar-open-always-create-notes nil)
+  :init
+  (fido-vertical-mode 1)
+  :bind ("C-c w c" . citar-create-note))
+
+(use-package citar-denote
+  :ensure t
+  :demand t
+  :after (:any citar denote)
+  :custom
+  (citar-open-always-create-notes t)
+  :init
+  (citar-denote-mode))
+;; Aliases:2 ends here
+>>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
