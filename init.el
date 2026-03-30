@@ -254,9 +254,20 @@
 
 (org-babel-do-load-languages
  'org-babel-load-languages
+<<<<<<< HEAD
  '((lisp . t)))
 
 (setq org-babel-lisp-eval-fn #'slime-eval)
+=======
+ '((lisp . t) (plantuml .t)))
+
+(setq org-babel-lisp-eval-fn #'slime-eval)
+
+(add-hook 'org-babel-after-execute-hook
+        (lambda ()
+          (when org-inline-image-overlays
+            (org-redisplay-inline-images))))
+>>>>>>> 7848b225b58ae5d0683ceac800b0b4c9527dcbe4
 ;; Org Babel config:1 ends here
 
 ;; [[file:init.org::*Helm-bibtex][Helm-bibtex:1]]
@@ -272,11 +283,16 @@
 ;; [[file:init.org::*Org][Org:1]]
 (setq org-use-fast-todo-selection t)
 
+<<<<<<< HEAD
 (setq org-treat-S-cursor-todo-selection-as-state-change nil)
+=======
+  (setq org-treat-S-cursor-todo-selection-as-state-change nil)
+>>>>>>> 7848b225b58ae5d0683ceac800b0b4c9527dcbe4
 
 
 
 
+<<<<<<< HEAD
 (setq org-todo-keywords
       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))))
@@ -451,6 +467,177 @@
   :config
   (when (locate-library "denote")
     (consult-notes-denote-mode)))
+=======
+  (setq org-todo-keywords
+        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))))
+
+  (setq org-todo-keyword-faces
+        (quote (("TODO" :foreground "red" :weight bold)
+                ("NEXT" :foreground "blue" :weight bold)
+                ("DONE" :foreground "forest green" :weight bold)
+                ("WAITING" :foreground "orange" :weight bold)
+                ("HOLD" :foreground "magenta" :weight bold)
+                ("CANCELLED" :foreground "forest green" :weight bold))))
+
+  (setq org-agenda-files (list "~/org/denote" "~/org"))
+
+  (define-key global-map (kbd "C-c c") 'org-capture)
+  (require 'org-protocol)
+
+  (setq org-agenda-custom-commands
+        '(("g" "Get Things Done (GTD)"
+           ((agenda ""
+                    ((org-agenda-span 'day)
+                     (org-agenda-skip-function
+                      '(org-agenda-skip-entry-if 'deadline))
+                     (org-deadline-warning-days 0)))
+  	  (agenda ""
+                    ((org-agenda-entry-types '(:deadline))
+                     (org-deadline-warning-days 7)
+  		   (org-agenda-time-grid nil)
+                     (org-agenda-overriding-header "\nDeadlines\n")))
+            (todo "NEXT"
+                  ((org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'deadline))
+                   (org-agenda-prefix-format "  %i %-12:c [%e] ")
+                   (org-agenda-overriding-header "\nTasks\n")))                
+            (tags "inbox"
+                  ((org-agenda-prefix-format "  %?-12t% s")
+                   (org-agenda-overriding-header "\nInbox\n")))
+            (tags "CLOSED>=\"<today>\""
+                  ((org-agenda-overriding-header "\nCompleted today\n")))
+  	  (todo "WAITING"
+  		((org-agenda-overriding-header "\nWaiting\n")))))
+  	("c" . "Contexts (GTD)")
+  	("cs" "Stand-up"
+  	 tags-todo "stand-up")
+  	("cp" "Sprint Planning"
+  	 tags-todo "sprint-planning")
+  	("cr" "Sprint Retrospective"
+  	 tags-todo "sprint-retro")
+  	("cw" "Sprint Review"
+  	 tags-todo "sprint-review")
+  	("cb" "Sprint Backlog Refinement"
+  	 tags-todo "sprint-backlog")
+  	("ct" "SSA Roundtable"
+  	 tags-todo "ssa-rt")
+  	("cj" "James"
+  	 tags-todo "james")
+  	("ch" "Travis (branchHead)"
+  	 tags-todo "travis")))
+
+        
+
+
+
+
+
+  ;; ;;
+;;  (setq org-refile-targets
+        ;; '(("~/org/projects.org" :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
+        ;; ("~/org/someday.org" :level . 1)))
+
+
+        (setq org-refile-targets '((org-agenda-files :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
+  				 (org-agenda-files :maxlevel . 10)))
+
+        (setq org-refile-use-outline-path 'file)
+        (setq org-outline-path-complete-in-steps nil)
+
+        (setq org-agenda-hide-tags-regexp ".")
+
+        (setq org-agenda-prefix-format
+              '((agenda . " %i %-12:c%?-12t% s")
+                (todo   . " ")
+                (tags   . " %i %-12:c")
+                (search . " %i %-12:c")))
+
+        (define-key global-map (kbd "C-c a") 'org-agenda)
+
+        (setq org-log-done 'time)
+
+
+        (defvar ajb/inbox-file "~/org/inbox.org" "The location of my inbox file.")
+        (defvar ajb/org-dir "~/org")
+
+
+        (use-package org
+  	:after
+  	denote
+  	:bind
+  	(("C-c c" . org-capture)
+  	 ("C-c l" . org-store-link))
+  	:custom
+  	(org-default-notes-file "~/org/inbox.org")
+  	(org-capture-bookmark nil)
+  	;; Capture templates
+  	(org-capture-templates
+  	 '(("f" "Fleeting note" item
+              (file+headline org-default-notes-file "Notes")
+              "- %?")
+             ("p" "Permanent note" plain
+              (file denote-last-path)
+              #'denote-org-capture
+              :no-save t
+              :immediate-finish nil
+              :kill-buffer t
+              :jump-to-captured t)
+             ("i" "New inbox task" entry
+              (file+headline org-default-notes-file "Tasks")
+              "* TODO %i%?")
+             ;; todo seems to be a bug? here where org-protocol can't open the bib file if it is open in a buffer??
+             ;; maybe try and test it with a org file instead of bib, never seen it before
+             ("w" "Web entry" plain
+              (file "~/org/denote/references.bib")
+              (function
+               (lambda()
+      	       (let ((test (ajb/random-string))) (string-join (list "@online{" test ", title=\"%:description\", url=%:link}"))))))
+             ("l" "Link Annotation" entry
+      	    (file+headline "~/org/inbox.org" "Web References") "** %:annotation"))))
+;; Org:1 ends here
+
+;; [[file:init.org::*Denote][Denote:1]]
+(defvar ajb/denote-dir "~/org/denote")
+  (use-package denote
+    :init
+    (require 'denote-org)
+    (denote-rename-buffer-mode 1)
+    :custom
+    (denote-directory ajb/denote-dir)
+    :hook
+    (dired-mode . denote-dired-mode)
+    :custom-face
+    (denote-faces-link ((t (:slant italic)))))
+
+  (use-package consult-notes
+    :commands (consult-notes
+               consult-notes-search-in-all-notes)
+    :custom
+    (consult-notes-file-dir-sources
+     `(("Denote" ?d ,ajb/denote-dir)))
+    :config
+    (when (locate-library "denote")
+      (consult-notes-denote-mode)))
+
+(use-package denote-journal
+  :ensure t
+  ;; Bind those to some key for your convenience.
+  :commands ( denote-journal-new-entry
+              denote-journal-new-or-existing-entry
+              denote-journal-link-or-create-entry )
+  :hook (calendar-mode . denote-journal-calendar-mode)
+  :config
+  ;; Use the "journal" subdirectory of the `denote-directory'.  Set this
+  ;; to nil to use the `denote-directory' instead.
+  (setq denote-journal-directory
+        (expand-file-name "journal" denote-directory))
+  ;; Default keyword for new journal entries. It can also be a list of
+  ;; strings.
+  (setq denote-journal-keyword "journal")
+  ;; Read the doc string of `denote-journal-title-format'.
+  (setq denote-journal-title-format 'day-date-month-year))
+>>>>>>> 7848b225b58ae5d0683ceac800b0b4c9527dcbe4
 ;; Denote:1 ends here
 
 ;; [[file:init.org::*Citar][Citar:1]]
@@ -460,6 +647,10 @@
   :custom
   (citar-bibliography '("~/org/denote/references.bib"))
   (citar-open-always-create-notes nil)
+<<<<<<< HEAD
+=======
+  (citar-library-paths '("~/org/denote/"))
+>>>>>>> 7848b225b58ae5d0683ceac800b0b4c9527dcbe4
   :init
   (fido-vertical-mode 1)
   :bind ("C-c w c" . citar-create-note))
@@ -487,6 +678,7 @@
   (citar-denote-mode)
   ;; Bind all available commands
   :bind (("C-c w d" . citar-denote-dwim)
+<<<<<<< HEAD
 	 ("C-c w e" . citar-denote-open-reference-entry)
 	 ("C-c w a" . citar-denote-add-citekey)
 	 ("C-c w k" . citar-denote-remove-citekey)
@@ -496,6 +688,17 @@
 	 ("C-c w x" . citar-denote-nocite)
 	 ("C-c w y" . citar-denote-cite-nocite)
 	 ("C-c w z" . citar-denote-nobib)))
+=======
+       ("C-c w e" . citar-denote-open-reference-entry)
+       ("C-c w a" . citar-denote-add-citekey)
+       ("C-c w k" . citar-denote-remove-citekey)
+       ("C-c w r" . citar-denote-find-reference)
+       ("C-c w l" . citar-denote-link-reference)
+       ("C-c w f" . citar-denote-find-citation)
+       ("C-c w x" . citar-denote-nocite)
+       ("C-c w y" . citar-denote-cite-nocite)
+       ("C-c w z" . citar-denote-nobib)))
+>>>>>>> 7848b225b58ae5d0683ceac800b0b4c9527dcbe4
 ;; Citar-Denote:1 ends here
 
 ;; [[file:init.org::*Bibtex][Bibtex:1]]

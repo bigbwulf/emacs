@@ -310,10 +310,17 @@ Completion popups for mb
 
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((lisp . t)))
+   '((lisp . t) (plantuml .t)))
 
   (setq org-babel-lisp-eval-fn #'slime-eval)
+
+  (add-hook 'org-babel-after-execute-hook
+          (lambda ()
+            (when org-inline-image-overlays
+              (org-redisplay-inline-images))))
+
 #+end_src
+
 
 ** Helm-bibtex
 #+begin_src emacs-lisp
@@ -368,7 +375,7 @@ Completion popups for mb
                   ((org-agenda-skip-function
                     '(org-agenda-skip-entry-if 'deadline))
                    (org-agenda-prefix-format "  %i %-12:c [%e] ")
-                   (org-agenda-overriding-header "\nTasks\n")))      
+                   (org-agenda-overriding-header "\nTasks\n")))                
             (tags "inbox"
                   ((org-agenda-prefix-format "  %?-12t% s")
                    (org-agenda-overriding-header "\nInbox\n")))
@@ -376,121 +383,93 @@ Completion popups for mb
                   ((org-agenda-overriding-header "\nCompleted today\n")))
   	  (todo "WAITING"
   		((org-agenda-overriding-header "\nWaiting\n")))))
-  	
   	("c" . "Contexts (GTD)")
   	("cs" "Stand-up"
-  	 tags-todo "stand_up")
+  	 tags-todo "stand-up")
   	("cp" "Sprint Planning"
-  	 tags-todo "sprint_planning")
+  	 tags-todo "sprint-planning")
   	("cr" "Sprint Retrospective"
-  	 tags-todo "sprint_retro")
+  	 tags-todo "sprint-retro")
   	("cw" "Sprint Review"
-  	 tags-todo "sprint_review")
+  	 tags-todo "sprint-review")
   	("cb" "Sprint Backlog Refinement"
-  	 tags-todo "sprint_backlog")
+  	 tags-todo "sprint-backlog")
   	("ct" "SSA Roundtable"
-  	 tags-todo "ssa_rt")
+  	 tags-todo "ssa-rt")
   	("cj" "James"
-  	 tags-todo "@james")
+  	 tags-todo "james")
   	("ch" "Travis (branchHead)"
-  	 tags-todo "@travis")))
+  	 tags-todo "travis")))
 
-  (setq org-tag-alist
-        '(;;people
-  	("@James" . ?J)
-  	("@Travis" . ?T)
-  	("@Fosty" . ?F)
-  	("@Yousseff" . ?Y)
-  	("@Chrisb" . ?C)
-  	("@Goutham" . ?G)
-  	("@Bronco" . ?B)
-
-  	;; Ceremonies
-  	("sprint_planning" . ?p)
-  	("sprint_retro" . ?r)
-  	("ssa_rt" . ?t)
-  	("stand_up" . ?s)))
+        
 
 
-  (setq org-refile-targets '((org-agenda-files :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
-  			   (org-agenda-files :maxlevel . 10)))
-
-  (setq org-refile-use-outline-path 'file)
-  (setq org-outline-path-complete-in-steps nil)
-
-  (setq org-agenda-hide-tags-regexp ".")
-
-  (setq org-agenda-prefix-format
-        '((agenda . " %i %-12:c%?-12t% s")
-          (todo   . " ")
-          (tags   . " %i %-12:c")
-          (search . " %i %-12:c")))
-
-  (define-key global-map (kbd "C-c a") 'org-agenda)
-
-  (setq org-log-done 'time)
 
 
-  (defvar ajb/inbox-file "~/org/inbox.org" "The location of my inbox file.")
-  (defvar ajb/org-dir "~/org")
+
+  ;; ;;
+;;  (setq org-refile-targets
+        ;; '(("~/org/projects.org" :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
+        ;; ("~/org/someday.org" :level . 1)))
 
 
-  (use-package org
-    :after
-    denote
-    :bind
-    (("C-c c" . org-capture)
-     ("C-c l" . org-store-link))
-    :custom
-    (org-default-notes-file "~/org/inbox.org")
-    (org-capture-bookmark nil)
-    ;; Capture templates
-    (org-capture-templates
-     '(("f" "Fleeting note" item
-        (file+headline org-default-notes-file "Notes")
-        "- %?")
-       ("p" "Permanent note" plain
-        (file denote-last-path)
-        #'denote-org-capture
-        :no-save t
-        :immediate-finish nil
-        :kill-buffer t
-        :jump-to-captured t)
-       ("i" "New inbox task" entry
-        (file+headline org-default-notes-file "Tasks")
-        "* TODO %i%?")
-       ;; todo seems to be a bug? here where org-protocol can't open the bib file if it is open in a buffer??
-       ;; maybe try and test it with a org file instead of bib, never seen it before
-       ("w" "Web entry" plain
-        (file "~/org/denote/references.bib")
-        (function
-         (lambda()
-      	 (let ((test (ajb/random-string))) (string-join (list "@online{" test ", title=\"%:description\", url=%:link}"))))))
-       ("l" "Link Annotation" entry
-        (file+headline "~/org/inbox.org" "Web References") "** %:annotation"))))
+        (setq org-refile-targets '((org-agenda-files :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
+  				 (org-agenda-files :maxlevel . 10)))
+
+        (setq org-refile-use-outline-path 'file)
+        (setq org-outline-path-complete-in-steps nil)
+
+        (setq org-agenda-hide-tags-regexp ".")
+
+        (setq org-agenda-prefix-format
+              '((agenda . " %i %-12:c%?-12t% s")
+                (todo   . " ")
+                (tags   . " %i %-12:c")
+                (search . " %i %-12:c")))
+
+        (define-key global-map (kbd "C-c a") 'org-agenda)
+
+        (setq org-log-done 'time)
+
+
+        (defvar ajb/inbox-file "~/org/inbox.org" "The location of my inbox file.")
+        (defvar ajb/org-dir "~/org")
+
+
+        (use-package org
+  	:after
+  	denote
+  	:bind
+  	(("C-c c" . org-capture)
+  	 ("C-c l" . org-store-link))
+  	:custom
+  	(org-default-notes-file "~/org/inbox.org")
+  	(org-capture-bookmark nil)
+  	;; Capture templates
+  	(org-capture-templates
+  	 '(("f" "Fleeting note" item
+              (file+headline org-default-notes-file "Notes")
+              "- %?")
+             ("p" "Permanent note" plain
+              (file denote-last-path)
+              #'denote-org-capture
+              :no-save t
+              :immediate-finish nil
+              :kill-buffer t
+              :jump-to-captured t)
+             ("i" "New inbox task" entry
+              (file+headline org-default-notes-file "Tasks")
+              "* TODO %i%?")
+             ;; todo seems to be a bug? here where org-protocol can't open the bib file if it is open in a buffer??
+             ;; maybe try and test it with a org file instead of bib, never seen it before
+             ("w" "Web entry" plain
+              (file "~/org/denote/references.bib")
+              (function
+               (lambda()
+      	       (let ((test (ajb/random-string))) (string-join (list "@online{" test ", title=\"%:description\", url=%:link}"))))))
+             ("l" "Link Annotation" entry
+      	    (file+headline "~/org/inbox.org" "Web References") "** %:annotation"))))
 #+end_src
-** Org helper functions
-[[https://doc.norang.ca/org-mode.html][organize your life in org-mode]]
-#+begin_src emacs-lisp
-  (defun bh/is-project-p ()
-    (save-restriction
-      (widen)
-      (let ((has-subtask)
-  	  (subtree-end (save-excursion (org-end-of-subtree t)))
-  	  (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-        (save-excurtion
-         (forward-line 1)
-         (while (and (not has-subtask)
-  		   (< (point) subtree-end)
-  		   (re-search-forward "^\*+ " subtree-end t))
-  	 (when (member (org-get-todo-state) org-todo-keywords-1)
-  	   (setq has-subtask t))))
-        (and is-a-task has-subtask))))
-#+end_src
-
-#+RESULTS:
-: org-store-link
-
 ** Denote
 #+begin_src emacs-lisp
 
@@ -515,7 +494,25 @@ Completion popups for mb
     :config
     (when (locate-library "denote")
       (consult-notes-denote-mode)))
-#+end_src
+
+(use-package denote-journal
+  :ensure t
+  ;; Bind those to some key for your convenience.
+  :commands ( denote-journal-new-entry
+              denote-journal-new-or-existing-entry
+              denote-journal-link-or-create-entry )
+  :hook (calendar-mode . denote-journal-calendar-mode)
+  :config
+  ;; Use the "journal" subdirectory of the `denote-directory'.  Set this
+  ;; to nil to use the `denote-directory' instead.
+  (setq denote-journal-directory
+        (expand-file-name "journal" denote-directory))
+  ;; Default keyword for new journal entries. It can also be a list of
+  ;; strings.
+  (setq denote-journal-keyword "journal")
+  ;; Read the doc string of `denote-journal-title-format'.
+  (setq denote-journal-title-format 'day-date-month-year))
+      #+end_src
 
 ** Citar
 #+begin_src emacs-lisp
@@ -526,10 +523,14 @@ Completion popups for mb
     :custom
     (citar-bibliography '("~/org/denote/references.bib"))
     (citar-open-always-create-notes nil)
+    (citar-library-paths '("~/org/denote/"))
     :init
     (fido-vertical-mode 1)
     :bind ("C-c w c" . citar-create-note))
 #+end_src
+
+#+RESULTS:
+: citar-create-note
 
 ** Citar-Denote
 #+begin_src emacs-lisp
@@ -596,5 +597,66 @@ Version: 2025-10-16"
     (setcar xresult (aref xletters (random (length xletters))))
     (concat xresult)))
 #+end_src
+** Org beautify
+https://zzamboni.org/post/beautifying-org-mode-in-emacs/
+
+Hide empasis marckup (e.g. ~/.../~ for italics, ~*...*~ for bold etc
+#+begin_src emacs-lisp
+  (setq org-hide-emphasis-markers t)
+  #+end_src
+
+Set up a fot-lock substition for list markers
+  #+begin_src emacs-lisp
+   (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+#+end_src
+
+~org-bullets~ package replaces all headline markers with different unicode bullets
+
+#+begin_src emacs-lisp
+  (use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+  #+end_src
+
+
+
+  
+Finally, we set up a nice proportional font, in different sizes, for the headlines. The fonts listed will be tried in sequence, and the first one found will be used. My current favorite is ET Book, feel free to add your own:
+
+#+begin_src emacs-lisp
+  (let* ((variable-tuple
+          (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+                ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+                ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+                ((x-list-fonts "Verdana")         '(:font "Verdana"))
+                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+         (base-font-color     (face-foreground 'default nil 'default))
+         (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+    (custom-theme-set-faces
+     'user
+     `(org-level-8 ((t (,@headline ,@variable-tuple))))
+     `(org-level-7 ((t (,@headline ,@variable-tuple))))
+     `(org-level-6 ((t (,@headline ,@variable-tuple))))
+     `(org-level-5 ((t (,@headline ,@variable-tuple))))
+     `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+     `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+     `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+     `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+     `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
+#+end_src
+
+
+
+
+
+
+
+
+
+
 
 
