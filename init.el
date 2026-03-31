@@ -175,10 +175,6 @@
 ;; Trashed:1 ends here
 
 ;; [[file:init.org::*Undocumented][Undocumented:1]]
-<<<<<<< HEAD
-=======
-(require 'org-protocol)
->>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -246,32 +242,18 @@
 (defalias 'emc 'find-file)
 ;; Aliases:1 ends here
 
-<<<<<<< HEAD
 ;; [[file:init.org::*Eshell][Eshell:1]]
-=======
-;; [[file:init.org::*Aliases][Aliases:2]]
->>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
 (use-package eshell-info-banner
   :ensure t
   :defer t
   :hook (eshell-banner-load . eshell-info-banner-update-banner))
-<<<<<<< HEAD
 ;; Eshell:1 ends here
 
 ;; [[file:init.org::*Org Babel config][Org Babel config:1]]
-=======
-
->>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
 (setq inferior-lisp-program "sbcl")
 
 (org-babel-do-load-languages
  'org-babel-load-languages
-<<<<<<< HEAD
-<<<<<<< HEAD
- '((lisp . t)))
-
-(setq org-babel-lisp-eval-fn #'slime-eval)
-=======
  '((lisp . t) (plantuml .t)))
 
 (setq org-babel-lisp-eval-fn #'slime-eval)
@@ -280,35 +262,9 @@
         (lambda ()
           (when org-inline-image-overlays
             (org-redisplay-inline-images))))
->>>>>>> 7848b225b58ae5d0683ceac800b0b4c9527dcbe4
 ;; Org Babel config:1 ends here
 
 ;; [[file:init.org::*Helm-bibtex][Helm-bibtex:1]]
-=======
- '((lisp . t)))
-
-(setq org-babel-lisp-eval-fn #'slime-eval)
-
-(require 'org-tempo)
-
-
-;; tags for code navigation
-(use-package ggtags
-  :ensure t
-  :config
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              (when (derived-mode-p 'c-mode 'c++-mode)
-                (ggtags-mode 1)))))
-
-
-(use-package yasnippet
-  :ensure t
-  :init
-  (yas-global-mode 1))
-
-
->>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
 (use-package helm-bibtex
   :config
   (setq bibtex-completion-pdf-field "File"
@@ -316,344 +272,146 @@
         bibtex-completion-additional-search-fields '(keywords))
   :bind
   (("C-c n B" . helm-bibtex)))
-<<<<<<< HEAD
 ;; Helm-bibtex:1 ends here
 
 ;; [[file:init.org::*Org][Org:1]]
 (setq org-use-fast-todo-selection t)
 
-<<<<<<< HEAD
-(setq org-treat-S-cursor-todo-selection-as-state-change nil)
-=======
-  (setq org-treat-S-cursor-todo-selection-as-state-change nil)
->>>>>>> 7848b225b58ae5d0683ceac800b0b4c9527dcbe4
+    (setq org-treat-S-cursor-todo-selection-as-state-change nil)
 
 
 
 
-<<<<<<< HEAD
-(setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))))
+    (setq org-todo-keywords
+          (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                  (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))))
 
-(setq org-todo-keyword-faces
-      (quote (("TODO" :foreground "red" :weight bold)
-              ("NEXT" :foreground "blue" :weight bold)
-              ("DONE" :foreground "forest green" :weight bold)
-              ("WAITING" :foreground "orange" :weight bold)
-              ("HOLD" :foreground "magenta" :weight bold)
-              ("CANCELLED" :foreground "forest green" :weight bold))))
+    (setq org-todo-keyword-faces
+          (quote (("TODO" :foreground "red" :weight bold)
+                  ("NEXT" :foreground "blue" :weight bold)
+                  ("DONE" :foreground "forest green" :weight bold)
+                  ("WAITING" :foreground "orange" :weight bold)
+                  ("HOLD" :foreground "magenta" :weight bold)
+                  ("CANCELLED" :foreground "forest green" :weight bold))))
 
-(setq org-agenda-files (list "~/org/denote" "~/org"))
+    (setq org-agenda-files (list "~/org/denote" "~/org"))
 
-(define-key global-map (kbd "C-c c") 'org-capture)
-(require 'org-protocol)
+    (define-key global-map (kbd "C-c c") 'org-capture)
+    (require 'org-protocol)
 
-(setq org-agenda-custom-commands
-      '(("g" "Get Things Done (GTD)"
-         ((agenda ""
-                  ((org-agenda-span 'day)
-                   (org-agenda-skip-function
-                    '(org-agenda-skip-entry-if 'deadline))
-                   (org-deadline-warning-days 0)))
-	  (agenda ""
-                  ((org-agenda-entry-types '(:deadline))
-                   (org-deadline-warning-days 7)
-		   (org-agenda-time-grid nil)
-                   (org-agenda-overriding-header "\nDeadlines\n")))
-          (todo "NEXT"
-                ((org-agenda-skip-function
-                  '(org-agenda-skip-entry-if 'deadline))
-                 (org-agenda-prefix-format "  %i %-12:c [%e] ")
-                 (org-agenda-overriding-header "\nTasks\n")))      
-          (tags "inbox"
-                ((org-agenda-prefix-format "  %?-12t% s")
-                 (org-agenda-overriding-header "\nInbox\n")))
-          (tags "CLOSED>=\"<today>\""
-                ((org-agenda-overriding-header "\nCompleted today\n")))
-	  (todo "WAITING"
-		((org-agenda-overriding-header "\nWaiting\n")))))
-	
-	("c" . "Contexts (GTD)")
-	("cs" "Stand-up"
-	 tags-todo "stand_up")
-	("cp" "Sprint Planning"
-	 tags-todo "sprint_planning")
-	("cr" "Sprint Retrospective"
-	 tags-todo "sprint_retro")
-	("cw" "Sprint Review"
-	 tags-todo "sprint_review")
-	("cb" "Sprint Backlog Refinement"
-	 tags-todo "sprint_backlog")
-	("ct" "SSA Roundtable"
-	 tags-todo "ssa_rt")
-	("cj" "James"
-	 tags-todo "@james")
-	("ch" "Travis (branchHead)"
-	 tags-todo "@travis")))
-
-(setq org-tag-alist
-      '(;;people
-	("@James" . ?J)
-	("@Travis" . ?T)
-	("@Fosty" . ?F)
-	("@Yousseff" . ?Y)
-	("@Chrisb" . ?C)
-	("@Goutham" . ?G)
-	("@Bronco" . ?B)
-
-	;; Ceremonies
-	("sprint_planning" . ?p)
-	("sprint_retro" . ?r)
-	("ssa_rt" . ?t)
-	("stand_up" . ?s)))
-
-
-(setq org-refile-targets '((org-agenda-files :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
-			   (org-agenda-files :maxlevel . 10)))
-
-(setq org-refile-use-outline-path 'file)
-(setq org-outline-path-complete-in-steps nil)
-
-(setq org-agenda-hide-tags-regexp ".")
-
-(setq org-agenda-prefix-format
-      '((agenda . " %i %-12:c%?-12t% s")
-        (todo   . " ")
-        (tags   . " %i %-12:c")
-        (search . " %i %-12:c")))
-
-(define-key global-map (kbd "C-c a") 'org-agenda)
-
-(setq org-log-done 'time)
-=======
->>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
-
-
-(defvar ajb/inbox-file "~/org/inbox.org" "The location of my inbox file.")
-(defvar ajb/org-dir "~/org")
-
-
-(use-package org
-  :after
-  denote
-  :bind
-  (("C-c c" . org-capture)
-   ("C-c l" . org-store-link))
-  :custom
-<<<<<<< HEAD
-  (org-default-notes-file "~/org/inbox.org")
-  (org-capture-bookmark nil)
-  ;; Capture templates
-=======
-  (org-default-notes-file ajb/inbox-file)
-  (org-capture-bookmark nil)
-  ;;capture templates
->>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
-  (org-capture-templates
-   '(("f" "Fleeting note" item
-      (file+headline org-default-notes-file "Notes")
-      "- %?")
-     ("p" "Permanent note" plain
-      (file denote-last-path)
-      #'denote-org-capture
-      :no-save t
-<<<<<<< HEAD
-      :immediate-finish nil
-      :kill-buffer t
-      :jump-to-captured t)
-     ("i" "New inbox task" entry
-      (file+headline org-default-notes-file "Tasks")
-      "* TODO %i%?")
-     ;; todo seems to be a bug? here where org-protocol can't open the bib file if it is open in a buffer??
-     ;; maybe try and test it with a org file instead of bib, never seen it before
-     ("w" "Web entry" plain
-      (file "~/org/denote/references.bib")
-      (function
-       (lambda()
-    	 (let ((test (ajb/random-string))) (string-join (list "@online{" test ", title=\"%:description\", url=%:link}"))))))
-     ("l" "Link Annotation" entry
-      (file+headline "~/org/inbox.org" "Web References") "** %:annotation"))))
-;; Org:1 ends here
-
-;; [[file:init.org::*Org helper functions][Org helper functions:1]]
-(defun bh/is-project-p ()
-  (save-restriction
-    (widen)
-    (let ((has-subtask)
-	  (subtree-end (save-excursion (org-end-of-subtree t)))
-	  (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-      (save-excurtion
-       (forward-line 1)
-       (while (and (not has-subtask)
-		   (< (point) subtree-end)
-		   (re-search-forward "^\*+ " subtree-end t))
-	 (when (member (org-get-todo-state) org-todo-keywords-1)
-	   (setq has-subtask t))))
-      (and is-a-task has-subtask))))
-;; Org helper functions:1 ends here
-
-;; [[file:init.org::*Denote][Denote:1]]
-=======
-      :immediate finish nil
-      :kill-buffer
-      :jump-to-captured t)
-     ("t" "New task" entry
-      (file+headline org-default-notes-file "Tasks")
-      "* TODO %i%?"))))
-
-
->>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
-(defvar ajb/denote-dir "~/org/denote")
-(use-package denote
-  :init
-  (require 'denote-org)
-  (denote-rename-buffer-mode 1)
-  :custom
-  (denote-directory ajb/denote-dir)
-  :hook
-  (dired-mode . denote-dired-mode)
-  :custom-face
-  (denote-faces-link ((t (:slant italic)))))
-
-(use-package consult-notes
-  :commands (consult-notes
-             consult-notes-search-in-all-notes)
-  :custom
-  (consult-notes-file-dir-sources
-   `(("Denote" ?d ,ajb/denote-dir)))
-  :config
-  (when (locate-library "denote")
-    (consult-notes-denote-mode)))
-<<<<<<< HEAD
-=======
-  (setq org-todo-keywords
-        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))))
-
-  (setq org-todo-keyword-faces
-        (quote (("TODO" :foreground "red" :weight bold)
-                ("NEXT" :foreground "blue" :weight bold)
-                ("DONE" :foreground "forest green" :weight bold)
-                ("WAITING" :foreground "orange" :weight bold)
-                ("HOLD" :foreground "magenta" :weight bold)
-                ("CANCELLED" :foreground "forest green" :weight bold))))
-
-  (setq org-agenda-files (list "~/org/denote" "~/org"))
-
-  (define-key global-map (kbd "C-c c") 'org-capture)
-  (require 'org-protocol)
-
-  (setq org-agenda-custom-commands
-        '(("g" "Get Things Done (GTD)"
-           ((agenda ""
-                    ((org-agenda-span 'day)
-                     (org-agenda-skip-function
+    (setq org-agenda-custom-commands
+          '(("g" "Get Things Done (GTD)"
+             ((agenda ""
+                      ((org-agenda-span 'day)
+                       (org-agenda-skip-function
+                        '(org-agenda-skip-entry-if 'deadline))
+                       (org-deadline-warning-days 0)))
+    	  (agenda ""
+                      ((org-agenda-entry-types '(:deadline))
+                       (org-deadline-warning-days 7)
+    		   (org-agenda-time-grid nil)
+                       (org-agenda-overriding-header "\nDeadlines\n")))
+              (todo "NEXT"
+                    ((org-agenda-skip-function
                       '(org-agenda-skip-entry-if 'deadline))
-                     (org-deadline-warning-days 0)))
-  	  (agenda ""
-                    ((org-agenda-entry-types '(:deadline))
-                     (org-deadline-warning-days 7)
-  		   (org-agenda-time-grid nil)
-                     (org-agenda-overriding-header "\nDeadlines\n")))
-            (todo "NEXT"
-                  ((org-agenda-skip-function
-                    '(org-agenda-skip-entry-if 'deadline))
-                   (org-agenda-prefix-format "  %i %-12:c [%e] ")
-                   (org-agenda-overriding-header "\nTasks\n")))                
-            (tags "inbox"
-                  ((org-agenda-prefix-format "  %?-12t% s")
-                   (org-agenda-overriding-header "\nInbox\n")))
-            (tags "CLOSED>=\"<today>\""
-                  ((org-agenda-overriding-header "\nCompleted today\n")))
-  	  (todo "WAITING"
-  		((org-agenda-overriding-header "\nWaiting\n")))))
-  	("c" . "Contexts (GTD)")
-  	("cs" "Stand-up"
-  	 tags-todo "stand-up")
-  	("cp" "Sprint Planning"
-  	 tags-todo "sprint-planning")
-  	("cr" "Sprint Retrospective"
-  	 tags-todo "sprint-retro")
-  	("cw" "Sprint Review"
-  	 tags-todo "sprint-review")
-  	("cb" "Sprint Backlog Refinement"
-  	 tags-todo "sprint-backlog")
-  	("ct" "SSA Roundtable"
-  	 tags-todo "ssa-rt")
-  	("cj" "James"
-  	 tags-todo "james")
-  	("ch" "Travis (branchHead)"
-  	 tags-todo "travis")))
-
-        
-
-
-
-
-
-  ;; ;;
-;;  (setq org-refile-targets
-        ;; '(("~/org/projects.org" :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
-        ;; ("~/org/someday.org" :level . 1)))
+                     (org-agenda-prefix-format "  %i %-12:c [%e] ")
+                     (org-agenda-overriding-header "\nTasks\n")))                
+              (tags "inbox"
+                    ((org-agenda-prefix-format "  %?-12t% s")
+                     (org-agenda-overriding-header "\nInbox\n")))
+              (tags "CLOSED>=\"<today>\""
+                    ((org-agenda-overriding-header "\nCompleted today\n")))
+    	  (todo "WAITING"
+    		((org-agenda-overriding-header "\nWaiting\n")))))
+    	("c" . "Contexts (GTD)")
+    	("cs" "Stand-up"
+    	 tags-todo "stand-up")
+    	("cp" "Sprint Planning"
+    	 tags-todo "sprint-planning")
+    	("cr" "Sprint Retrospective"
+    	 tags-todo "sprint-retro")
+    	("cw" "Sprint Review"
+    	 tags-todo "sprint-review")
+    	("cb" "Sprint Backlog Refinement"
+    	 tags-todo "sprint-backlog")
+    	("ct" "SSA Roundtable"
+    	 tags-todo "ssa-rt")
+    	("cj" "James"
+    	 tags-todo "james")
+    	("ch" "Travis (branchHead)"
+    	 tags-todo "travis")))
+(setq org-tag-alist '(("sprint-planning" . ?p)
+		      ("sprint-retro" . ?r)
+		      ("sprint-review" . ?w)
+		      ("sprint-backlog" . ?b)
+		      ("ssa-roundtable" . ?t)
+		      ("@james" . ?j)
+		      ("@travis" . ?t)
+		      ("@fosty" . ?f)
+		      ("@chrisb" . ?c)
+		      ("@yousseff" . ?y)))
+    ;; ;;
+  ;;  (setq org-refile-targets
+          ;; '(("~/org/projects.org" :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
+          ;; ("~/org/someday.org" :level . 1)))
 
 
-        (setq org-refile-targets '((org-agenda-files :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
-  				 (org-agenda-files :maxlevel . 10)))
+          (setq org-refile-targets '((org-agenda-files :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
+    				 (org-agenda-files :maxlevel . 10)))
 
-        (setq org-refile-use-outline-path 'file)
-        (setq org-outline-path-complete-in-steps nil)
+          (setq org-refile-use-outline-path 'file)
+          (setq org-outline-path-complete-in-steps nil)
 
-        (setq org-agenda-hide-tags-regexp ".")
+          (setq org-agenda-hide-tags-regexp ".")
 
-        (setq org-agenda-prefix-format
-              '((agenda . " %i %-12:c%?-12t% s")
-                (todo   . " ")
-                (tags   . " %i %-12:c")
-                (search . " %i %-12:c")))
+          (setq org-agenda-prefix-format
+                '((agenda . " %i %-12:c%?-12t% s")
+                  (todo   . " ")
+                  (tags   . " %i %-12:c")
+                  (search . " %i %-12:c")))
 
-        (define-key global-map (kbd "C-c a") 'org-agenda)
+          (define-key global-map (kbd "C-c a") 'org-agenda)
 
-        (setq org-log-done 'time)
-
-
-        (defvar ajb/inbox-file "~/org/inbox.org" "The location of my inbox file.")
-        (defvar ajb/org-dir "~/org")
+          (setq org-log-done 'time)
 
 
-        (use-package org
-  	:after
-  	denote
-  	:bind
-  	(("C-c c" . org-capture)
-  	 ("C-c l" . org-store-link))
-  	:custom
-  	(org-default-notes-file "~/org/inbox.org")
-  	(org-capture-bookmark nil)
-  	;; Capture templates
-  	(org-capture-templates
-  	 '(("f" "Fleeting note" item
-              (file+headline org-default-notes-file "Notes")
-              "- %?")
-             ("p" "Permanent note" plain
-              (file denote-last-path)
-              #'denote-org-capture
-              :no-save t
-              :immediate-finish nil
-              :kill-buffer t
-              :jump-to-captured t)
-             ("i" "New inbox task" entry
-              (file+headline org-default-notes-file "Tasks")
-              "* TODO %i%?")
-             ;; todo seems to be a bug? here where org-protocol can't open the bib file if it is open in a buffer??
-             ;; maybe try and test it with a org file instead of bib, never seen it before
-             ("w" "Web entry" plain
-              (file "~/org/denote/references.bib")
-              (function
-               (lambda()
-      	       (let ((test (ajb/random-string))) (string-join (list "@online{" test ", title=\"%:description\", url=%:link}"))))))
-             ("l" "Link Annotation" entry
-      	    (file+headline "~/org/inbox.org" "Web References") "** %:annotation"))))
+          (defvar ajb/inbox-file "~/org/inbox.org" "The location of my inbox file.")
+          (defvar ajb/org-dir "~/org")
+
+
+          (use-package org
+    	:after
+    	denote
+    	:bind
+    	(("C-c c" . org-capture)
+    	 ("C-c l" . org-store-link))
+    	:custom
+    	(org-default-notes-file "~/org/inbox.org")
+    	(org-capture-bookmark nil)
+    	;; Capture templates
+    	(org-capture-templates
+    	 '(("f" "Fleeting note" item
+                (file+headline org-default-notes-file "Notes")
+                "- %?")
+               ("p" "Permanent note" plain
+                (file denote-last-path)
+                #'denote-org-capture
+                :no-save t
+                :immediate-finish nil
+                :kill-buffer t
+                :jump-to-captured t)
+               ("i" "New inbox task" entry
+                (file+headline org-default-notes-file "Tasks")
+                "* TODO %i%?")
+               ;; todo seems to be a bug? here where org-protocol can't open the bib file if it is open in a buffer??
+               ;; maybe try and test it with a org file instead of bib, never seen it before
+               ("w" "Web entry" plain
+                (file "~/org/denote/references.bib")
+                (function
+                 (lambda()
+        	       (let ((test (ajb/random-string))) (string-join (list "@online{" test ", title=\"%:description\", url=%:link}"))))))
+               ("l" "Link Annotation" entry
+        	    (file+headline "~/org/inbox.org" "Web References") "** %:annotation"))))
 ;; Org:1 ends here
 
 ;; [[file:init.org::*Denote][Denote:1]]
@@ -696,24 +454,16 @@
   (setq denote-journal-keyword "journal")
   ;; Read the doc string of `denote-journal-title-format'.
   (setq denote-journal-title-format 'day-date-month-year))
->>>>>>> 7848b225b58ae5d0683ceac800b0b4c9527dcbe4
 ;; Denote:1 ends here
 
 ;; [[file:init.org::*Citar][Citar:1]]
-=======
-
->>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
 (use-package citar
   :ensure t
   :defer t
   :custom
-<<<<<<< HEAD
   (citar-bibliography '("~/org/denote/references.bib"))
   (citar-open-always-create-notes nil)
-<<<<<<< HEAD
-=======
   (citar-library-paths '("~/org/denote/"))
->>>>>>> 7848b225b58ae5d0683ceac800b0b4c9527dcbe4
   :init
   (fido-vertical-mode 1)
   :bind ("C-c w c" . citar-create-note))
@@ -741,7 +491,6 @@
   (citar-denote-mode)
   ;; Bind all available commands
   :bind (("C-c w d" . citar-denote-dwim)
-<<<<<<< HEAD
 	 ("C-c w e" . citar-denote-open-reference-entry)
 	 ("C-c w a" . citar-denote-add-citekey)
 	 ("C-c w k" . citar-denote-remove-citekey)
@@ -751,17 +500,6 @@
 	 ("C-c w x" . citar-denote-nocite)
 	 ("C-c w y" . citar-denote-cite-nocite)
 	 ("C-c w z" . citar-denote-nobib)))
-=======
-       ("C-c w e" . citar-denote-open-reference-entry)
-       ("C-c w a" . citar-denote-add-citekey)
-       ("C-c w k" . citar-denote-remove-citekey)
-       ("C-c w r" . citar-denote-find-reference)
-       ("C-c w l" . citar-denote-link-reference)
-       ("C-c w f" . citar-denote-find-citation)
-       ("C-c w x" . citar-denote-nocite)
-       ("C-c w y" . citar-denote-cite-nocite)
-       ("C-c w z" . citar-denote-nobib)))
->>>>>>> 7848b225b58ae5d0683ceac800b0b4c9527dcbe4
 ;; Citar-Denote:1 ends here
 
 ;; [[file:init.org::*Bibtex][Bibtex:1]]
@@ -793,20 +531,47 @@ Version: 2025-10-16"
     (setcar xresult (aref xletters (random (length xletters))))
     (concat xresult)))
 ;; Random string:1 ends here
-=======
-  (citar-bibliography '("~/org/references.bib"))
-  (citar-open-always-create-notes nil)
-  :init
-  (fido-vertical-mode 1)
-  :bind ("C-c w c" . citar-create-note))
 
-(use-package citar-denote
-  :ensure t
-  :demand t
-  :after (:any citar denote)
-  :custom
-  (citar-open-always-create-notes t)
-  :init
-  (citar-denote-mode))
-;; Aliases:2 ends here
->>>>>>> cffd3fa43b6052efd3c1d9d56d9d1d8ab0c52b3d
+;; [[file:init.org::*Org beautify][Org beautify:1]]
+(setq org-hide-emphasis-markers t)
+;; Org beautify:1 ends here
+
+;; [[file:init.org::*Org beautify][Org beautify:2]]
+(font-lock-add-keywords 'org-mode
+                       '(("^ *\\([-]\\) "
+                          (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+;; Org beautify:2 ends here
+
+;; [[file:init.org::*Org beautify][Org beautify:3]]
+(use-package org-bullets
+:config
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+;; Org beautify:3 ends here
+
+;; [[file:init.org::*Org beautify][Org beautify:4]]
+(let* ((variable-tuple
+        (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+              ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+              ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+              ((x-list-fonts "Verdana")         '(:font "Verdana"))
+              ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+              (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+       (base-font-color     (face-foreground 'default nil 'default))
+       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+  (custom-theme-set-faces
+   'user
+   `(org-level-8 ((t (,@headline ,@variable-tuple))))
+   `(org-level-7 ((t (,@headline ,@variable-tuple))))
+   `(org-level-6 ((t (,@headline ,@variable-tuple))))
+   `(org-level-5 ((t (,@headline ,@variable-tuple))))
+   `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+   `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+   `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+   `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+   `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
+;; Org beautify:4 ends here
+
+;; [[file:init.org::*Flyspell][Flyspell:1]]
+(add-hook 'org-mode-hook 'turn-on-flyspell)
+;; Flyspell:1 ends here

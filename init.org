@@ -1,7 +1,6 @@
 #+property: header-args :tangle "init.el" :comments link
 #+startup: content indent
 
-
 * init.el
 ** References
 https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
@@ -321,7 +320,6 @@ Completion popups for mb
 
 #+end_src
 
-
 ** Helm-bibtex
 #+begin_src emacs-lisp
 
@@ -335,140 +333,143 @@ Completion popups for mb
 #+end_src
 ** Org
 #+begin_src emacs-lisp
-  (setq org-use-fast-todo-selection t)
+      (setq org-use-fast-todo-selection t)
 
-  (setq org-treat-S-cursor-todo-selection-as-state-change nil)
-
-
-
-
-  (setq org-todo-keywords
-        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))))
-
-  (setq org-todo-keyword-faces
-        (quote (("TODO" :foreground "red" :weight bold)
-                ("NEXT" :foreground "blue" :weight bold)
-                ("DONE" :foreground "forest green" :weight bold)
-                ("WAITING" :foreground "orange" :weight bold)
-                ("HOLD" :foreground "magenta" :weight bold)
-                ("CANCELLED" :foreground "forest green" :weight bold))))
-
-  (setq org-agenda-files (list "~/org/denote" "~/org"))
-
-  (define-key global-map (kbd "C-c c") 'org-capture)
-  (require 'org-protocol)
-
-  (setq org-agenda-custom-commands
-        '(("g" "Get Things Done (GTD)"
-           ((agenda ""
-                    ((org-agenda-span 'day)
-                     (org-agenda-skip-function
-                      '(org-agenda-skip-entry-if 'deadline))
-                     (org-deadline-warning-days 0)))
-  	  (agenda ""
-                    ((org-agenda-entry-types '(:deadline))
-                     (org-deadline-warning-days 7)
-  		   (org-agenda-time-grid nil)
-                     (org-agenda-overriding-header "\nDeadlines\n")))
-            (todo "NEXT"
-                  ((org-agenda-skip-function
-                    '(org-agenda-skip-entry-if 'deadline))
-                   (org-agenda-prefix-format "  %i %-12:c [%e] ")
-                   (org-agenda-overriding-header "\nTasks\n")))                
-            (tags "inbox"
-                  ((org-agenda-prefix-format "  %?-12t% s")
-                   (org-agenda-overriding-header "\nInbox\n")))
-            (tags "CLOSED>=\"<today>\""
-                  ((org-agenda-overriding-header "\nCompleted today\n")))
-  	  (todo "WAITING"
-  		((org-agenda-overriding-header "\nWaiting\n")))))
-  	("c" . "Contexts (GTD)")
-  	("cs" "Stand-up"
-  	 tags-todo "stand-up")
-  	("cp" "Sprint Planning"
-  	 tags-todo "sprint-planning")
-  	("cr" "Sprint Retrospective"
-  	 tags-todo "sprint-retro")
-  	("cw" "Sprint Review"
-  	 tags-todo "sprint-review")
-  	("cb" "Sprint Backlog Refinement"
-  	 tags-todo "sprint-backlog")
-  	("ct" "SSA Roundtable"
-  	 tags-todo "ssa-rt")
-  	("cj" "James"
-  	 tags-todo "james")
-  	("ch" "Travis (branchHead)"
-  	 tags-todo "travis")))
-
-        
+      (setq org-treat-S-cursor-todo-selection-as-state-change nil)
 
 
 
 
+      (setq org-todo-keywords
+            (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                    (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "MEETING"))))
 
-  ;; ;;
-;;  (setq org-refile-targets
-        ;; '(("~/org/projects.org" :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
-        ;; ("~/org/someday.org" :level . 1)))
+      (setq org-todo-keyword-faces
+            (quote (("TODO" :foreground "red" :weight bold)
+                    ("NEXT" :foreground "blue" :weight bold)
+                    ("DONE" :foreground "forest green" :weight bold)
+                    ("WAITING" :foreground "orange" :weight bold)
+                    ("HOLD" :foreground "magenta" :weight bold)
+                    ("CANCELLED" :foreground "forest green" :weight bold))))
+
+      (setq org-agenda-files (list "~/org/denote" "~/org"))
+
+      (define-key global-map (kbd "C-c c") 'org-capture)
+      (require 'org-protocol)
+
+      (setq org-agenda-custom-commands
+            '(("g" "Get Things Done (GTD)"
+               ((agenda ""
+                        ((org-agenda-span 'day)
+                         (org-agenda-skip-function
+                          '(org-agenda-skip-entry-if 'deadline))
+                         (org-deadline-warning-days 0)))
+      	  (agenda ""
+                        ((org-agenda-entry-types '(:deadline))
+                         (org-deadline-warning-days 7)
+      		   (org-agenda-time-grid nil)
+                         (org-agenda-overriding-header "\nDeadlines\n")))
+                (todo "NEXT"
+                      ((org-agenda-skip-function
+                        '(org-agenda-skip-entry-if 'deadline))
+                       (org-agenda-prefix-format "  %i %-12:c [%e] ")
+                       (org-agenda-overriding-header "\nTasks\n")))                
+                (tags "inbox"
+                      ((org-agenda-prefix-format "  %?-12t% s")
+                       (org-agenda-overriding-header "\nInbox\n")))
+                (tags "CLOSED>=\"<today>\""
+                      ((org-agenda-overriding-header "\nCompleted today\n")))
+      	  (todo "WAITING"
+      		((org-agenda-overriding-header "\nWaiting\n")))))
+      	("c" . "Contexts (GTD)")
+      	("cs" "Stand-up"
+      	 tags-todo "stand-up")
+      	("cp" "Sprint Planning"
+      	 tags-todo "sprint-planning")
+      	("cr" "Sprint Retrospective"
+      	 tags-todo "sprint-retro")
+      	("cw" "Sprint Review"
+      	 tags-todo "sprint-review")
+      	("cb" "Sprint Backlog Refinement"
+      	 tags-todo "sprint-backlog")
+      	("ct" "SSA Roundtable"
+      	 tags-todo "ssa-rt")
+      	("cj" "James"
+      	 tags-todo "james")
+      	("ch" "Travis (branchHead)"
+      	 tags-todo "travis")))
+  (setq org-tag-alist '(("sprint-planning" . ?p)
+  		      ("sprint-retro" . ?r)
+  		      ("sprint-review" . ?w)
+  		      ("sprint-backlog" . ?b)
+  		      ("ssa-roundtable" . ?t)
+  		      ("@james" . ?j)
+  		      ("@travis" . ?t)
+  		      ("@fosty" . ?f)
+  		      ("@chrisb" . ?c)
+  		      ("@yousseff" . ?y)))
+      ;; ;;
+    ;;  (setq org-refile-targets
+            ;; '(("~/org/projects.org" :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
+            ;; ("~/org/someday.org" :level . 1)))
 
 
-        (setq org-refile-targets '((org-agenda-files :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
-  				 (org-agenda-files :maxlevel . 10)))
+            (setq org-refile-targets '((org-agenda-files :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")
+      				 (org-agenda-files :maxlevel . 10)))
 
-        (setq org-refile-use-outline-path 'file)
-        (setq org-outline-path-complete-in-steps nil)
+            (setq org-refile-use-outline-path 'file)
+            (setq org-outline-path-complete-in-steps nil)
 
-        (setq org-agenda-hide-tags-regexp ".")
+            (setq org-agenda-hide-tags-regexp ".")
 
-        (setq org-agenda-prefix-format
-              '((agenda . " %i %-12:c%?-12t% s")
-                (todo   . " ")
-                (tags   . " %i %-12:c")
-                (search . " %i %-12:c")))
+            (setq org-agenda-prefix-format
+                  '((agenda . " %i %-12:c%?-12t% s")
+                    (todo   . " ")
+                    (tags   . " %i %-12:c")
+                    (search . " %i %-12:c")))
 
-        (define-key global-map (kbd "C-c a") 'org-agenda)
+            (define-key global-map (kbd "C-c a") 'org-agenda)
 
-        (setq org-log-done 'time)
-
-
-        (defvar ajb/inbox-file "~/org/inbox.org" "The location of my inbox file.")
-        (defvar ajb/org-dir "~/org")
+            (setq org-log-done 'time)
 
 
-        (use-package org
-  	:after
-  	denote
-  	:bind
-  	(("C-c c" . org-capture)
-  	 ("C-c l" . org-store-link))
-  	:custom
-  	(org-default-notes-file "~/org/inbox.org")
-  	(org-capture-bookmark nil)
-  	;; Capture templates
-  	(org-capture-templates
-  	 '(("f" "Fleeting note" item
-              (file+headline org-default-notes-file "Notes")
-              "- %?")
-             ("p" "Permanent note" plain
-              (file denote-last-path)
-              #'denote-org-capture
-              :no-save t
-              :immediate-finish nil
-              :kill-buffer t
-              :jump-to-captured t)
-             ("i" "New inbox task" entry
-              (file+headline org-default-notes-file "Tasks")
-              "* TODO %i%?")
-             ;; todo seems to be a bug? here where org-protocol can't open the bib file if it is open in a buffer??
-             ;; maybe try and test it with a org file instead of bib, never seen it before
-             ("w" "Web entry" plain
-              (file "~/org/denote/references.bib")
-              (function
-               (lambda()
-      	       (let ((test (ajb/random-string))) (string-join (list "@online{" test ", title=\"%:description\", url=%:link}"))))))
-             ("l" "Link Annotation" entry
-      	    (file+headline "~/org/inbox.org" "Web References") "** %:annotation"))))
+            (defvar ajb/inbox-file "~/org/inbox.org" "The location of my inbox file.")
+            (defvar ajb/org-dir "~/org")
+
+
+            (use-package org
+      	:after
+      	denote
+      	:bind
+      	(("C-c c" . org-capture)
+      	 ("C-c l" . org-store-link))
+      	:custom
+      	(org-default-notes-file "~/org/inbox.org")
+      	(org-capture-bookmark nil)
+      	;; Capture templates
+      	(org-capture-templates
+      	 '(("f" "Fleeting note" item
+                  (file+headline org-default-notes-file "Notes")
+                  "- %?")
+                 ("p" "Permanent note" plain
+                  (file denote-last-path)
+                  #'denote-org-capture
+                  :no-save t
+                  :immediate-finish nil
+                  :kill-buffer t
+                  :jump-to-captured t)
+                 ("i" "New inbox task" entry
+                  (file+headline org-default-notes-file "Tasks")
+                  "* TODO %i%?")
+                 ;; todo seems to be a bug? here where org-protocol can't open the bib file if it is open in a buffer??
+                 ;; maybe try and test it with a org file instead of bib, never seen it before
+                 ("w" "Web entry" plain
+                  (file "~/org/denote/references.bib")
+                  (function
+                   (lambda()
+          	       (let ((test (ajb/random-string))) (string-join (list "@online{" test ", title=\"%:description\", url=%:link}"))))))
+                 ("l" "Link Annotation" entry
+          	    (file+headline "~/org/inbox.org" "Web References") "** %:annotation"))))
 #+end_src
 ** Denote
 #+begin_src emacs-lisp
@@ -648,15 +649,9 @@ Finally, we set up a nice proportional font, in different sizes, for the headlin
      `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
      `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
 #+end_src
-
-
-
-
-
-
-
-
-
-
+** Flyspell
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook 'turn-on-flyspell)
+#+end_src
 
 
